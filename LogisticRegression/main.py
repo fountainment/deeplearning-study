@@ -89,6 +89,7 @@ def test(test_data, args):
     b = args[1]
     # test begin
     for x in data:
+        # Is this formula correct?
         result = sigmod(np.array(x).dot(w) + np.mean(b))
         result = 1 if result > 0.5 else 0
         y_data.append(result)
@@ -99,8 +100,9 @@ def test(test_data, args):
 def read_csv_file(file_name):
     return list(csv.reader(open(file_name, 'r')))
 
+
 def write_csv_file(file_name, result):
-    csv.writer(open(file_name, 'w')).writerows(result)
+    csv.writer(open(file_name, 'w', newline='\n')).writerows(result)
 
 
 def main():
