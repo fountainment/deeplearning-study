@@ -12,7 +12,13 @@ import random
 id_key = ['PassengerId']
 y_key = ['Survived']
 filter_out = ['Name', 'Ticket', 'Cabin'] + id_key + y_key
-alpha = np.array([0.0005])
+
+
+def print_array(arr, format_str):
+    s = ''
+    for i in arr:
+        s += format_str % i
+    print(s)
 
 
 def sigmod(t):
@@ -54,20 +60,24 @@ def preprocess(raw_data):
 
 
 def train(train_data):
+    #learning rate
+    alpha = np.array([0.001])
+
     keys = train_data[0]
     data = train_data[1]
     y_data = train_data[2]
     # train begin
-    w = np.array([1.0 for i in range(len(keys))])
-    b = np.array([1.0 for i in range(len(keys))])
+    w = np.array([0.0 for i in range(len(keys))])
+    b = np.array([0.0])
     for i in range(10000):
+        alpha = alpha * 0.999
         pack = list(zip(data, y_data))
         random.shuffle(pack)
         data, y_data = list(zip(*pack))
         for i in range(len(data)):
             y = np.array(y_data[i])
             x = np.array(data[i])
-            z = w.T * x + b
+            z = np.dot(w.T, x) + b
             a = sigmod(z)
             dz = a - y
             dw = x * dz
@@ -75,9 +85,9 @@ def train(train_data):
             w -= alpha * dw
             b -= alpha * db
     # train end
-    print(keys)
-    print(w)
-    print(b)
+    print_array(keys, '%-10s')
+    print_array(w, '%-10.5f')
+    print_array(b, '%-10.5f')
     return (w, b)
 
 
@@ -90,7 +100,7 @@ def test(test_data, args):
     # test begin
     for x in data:
         # Is this formula correct?
-        result = sigmod(np.array(x).dot(w) + np.mean(b))
+        result = sigmod(np.dot(w.T, x) + b)
         result = 1 if result > 0.5 else 0
         y_data.append(result)
     # test end
