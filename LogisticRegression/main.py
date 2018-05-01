@@ -63,9 +63,7 @@ def train(train_data):
     #learning rate
     alpha = np.array([0.001])
 
-    keys = train_data[0]
-    data = train_data[1]
-    y_data = train_data[2]
+    keys, data, y_data = train_data
     # train begin
     w = np.array([0.0 for i in range(len(keys))])
     b = np.array([0.0])
