@@ -90,11 +90,9 @@ def train(train_data):
 
 
 def test(test_data, args):
-    keys = test_data[0]
-    data = test_data[1]
+    keys, data = test_data
     y_data = []
-    w = args[0]
-    b = args[1]
+    w, b = args
     # test begin
     for x in data:
         # Is this formula correct?
