@@ -61,37 +61,37 @@ def preprocess(raw_data):
 
 def train(train_data):
     #learning rate
-    alpha = np.array([0.001])
+    alpha = 0.004
 
     keys, data, y_data = train_data
     # train begin
-    w = np.array([0.0 for i in range(len(keys))])
-    b = np.array([0.0])
-    for i in range(10000):
-        alpha = alpha * 0.999
-        pack = list(zip(data, y_data))
-        random.shuffle(pack)
-        data, y_data = list(zip(*pack))
-        for i in range(len(data)):
-            y = np.array(y_data[i])
-            x = np.array(data[i])
-            z = np.dot(w.T, x) + b
-            a = sigmod(z)
-            dz = a - y
-            dw = x * dz
-            db = dz
-            w -= alpha * dw
-            b -= alpha * db
+    m = len(y_data)
+    m_reciprocal = 1.0 / m
+    nx = len(keys)
+    w = np.array([0.0 for i in range(nx)]).reshape(nx, 1)
+    b = 0.0
+    x = np.array(data).reshape(m, nx).T
+    y = np.array(y_data).reshape(1, m)
+    for i in range(100000):
+        z = np.dot(w.T, x) + b
+        a = sigmod(z)
+        dz = a - y
+        dw = m_reciprocal * np.dot(x, dz.T)
+        db = m_reciprocal * np.sum(dz)
+        w -= alpha * dw
+        b -= alpha * db
     # train end
+    print(dw)
+    print(db)
+    print()
     print_array(keys, '%-10s')
     print_array(w, '%-10.5f')
-    print_array(b, '%-10.5f')
+    print('%-10.5f' % b)
     return (w, b)
 
 
 def test(test_data, args):
-    keys, data = test_data
-    y_data = []
+    keys, data, y_data = test_data
     w, b = args
     # test begin
     for x in data:
