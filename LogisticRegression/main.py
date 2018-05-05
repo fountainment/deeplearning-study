@@ -6,7 +6,6 @@
 
 import csv
 import numpy as np
-import random
 
 
 id_key = ['PassengerId']
@@ -95,7 +94,6 @@ def test(test_data, args):
     w, b = args
     # test begin
     for x in data:
-        # Is this formula correct?
         result = sigmod(np.dot(w.T, x) + b)
         result = 1 if result > 0.5 else 0
         y_data.append(result)
